@@ -1,0 +1,7 @@
+/results
+/wandb
+/__pycache__
+*.pyc
+temp.py
+vocgan_jit_gta_jdit_ganspeech_2000.pts
+Duration_KREN1377.pickle

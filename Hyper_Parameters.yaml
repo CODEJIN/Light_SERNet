@@ -1,0 +1,107 @@
+Sound:
+    N_FFT: 1024
+    Mel_Dim: 80
+    Frame_Length: 1024
+    Frame_Shift: 256
+    Sample_Rate: 22050
+    Mel_F_Min: 0
+    Mel_F_Max: 8000
+    F0_Min: 50
+    F0_Max: 880
+
+Emotions: 4
+
+Light_SERNet:
+    Parallel_Path:
+        Channels: [32, 32, 32]
+        Kernel_Size: [[3, 3], [9, 1], [1, 11]]
+        Pool_Size: [[2, 2], [2, 2], [2, 2]]
+    LFLB:
+        Channels: [64, 96, 128, 160]
+        Kernel_Size: [[3, 3], [3, 3], [3, 3], [3, 3]]
+        Pool_Size: [[2, 2], [2, 2], [2, 1], [2, 1]]
+    Postnet:
+        Channels: 320
+        Dropout_Rate: 0.3
+
+
+Token_Path: 'E:/22K.Emotion/Token.yaml'
+Duration_Path: './Duration_KREN1377.pickle'
+Log_F0_Info_Path: 'E:/22K.Emotion/Log_F0_Info.yaml'
+Energy_Info_Path: 'E:/22K.Emotion/Energy_Info.yaml'
+Speaker_Info_Path: 'E:/22K.Emotion/Speaker_Info.yaml'
+Emotion_Info_Path: 'E:/22K.Emotion/Emotion_Info.yaml'
+Language_Info_Path: 'E:/22K.Emotion/Language_Info.yaml'
+Train:
+    Use_Pattern_Cache: true
+    Train_Pattern:
+        Path: 'E:/22K.Emotion/Train'
+        Metadata_File: 'METADATA.PICKLE'
+        Feature_Length:
+            Min: 0
+            Max: 1200
+        Accumulated_Dataset_Epoch: 10   # This is to prevent slow down from torch.utils.data.DataLoader when the number of patterns is small.
+        Augmentation_Ratio: 0.5
+    Eval_Pattern:
+        Path: 'E:/22K.Emotion/Eval'
+        Metadata_File: 'METADATA.PICKLE'
+        Feature_Length:
+            Min: 0
+            Max: 1200
+    Num_Workers: 2
+    Batch_Size: 64
+    Learning_Rate:
+        Initial: 1.0e-3
+        Base: 4000
+    ADAM:
+        Beta1: 0.9
+        Beta2: 0.999
+        Epsilon: 1.0e-7    
+    Weight_Decay: 1.0e-6
+    Gradient_Norm: 1.0
+    Max_Step: 100000
+    Discrimination_Start_Step: 50000
+    Checkpoint_Save_Interval: 1000
+    Logging_Interval: 1
+    Evaluation_Interval: 100
+    Inference_Interval: 1000
+    Initial_Inference: true
+
+Inference_Batch_Size: 256
+Inference_Wav_Path: [    
+    './Wav_for_Inference/add00003.wav',
+    './Wav_for_Inference/emf00003.wav',
+    './Wav_for_Inference/lmy01015.wav',
+    './Wav_for_Inference/1_0016.wav',
+    './Wav_for_Inference/add00003.wav',
+    './Wav_for_Inference/emf00003.wav',
+    './Wav_for_Inference/lmy01015.wav',
+    './Wav_for_Inference/1_0016.wav',
+    ]
+Inference_Speaker: [
+    'LMY',
+    'LMY',
+    'LMY',
+    'LMY',
+    'NEM',
+    'NEM',
+    'NEM',
+    'NEM',
+    ]
+
+Inference_Path: './results/Inference'
+Checkpoint_Path: './results/Checkpoint'
+Log_Path: './results/Log'
+
+Weights_and_Biases:
+    Use: true
+    Project: 'light_sernet'
+    Entity: 'codejin'
+    Name: 'Emotion'
+    Save_Checkpoint:
+        Use: false
+        Interval: 50000 # Unlike local, The capacity of WandB is small.
+
+Use_Mixed_Precision: true
+Use_Multi_GPU: false # true
+Device: '0' # '4,5,6,7'
